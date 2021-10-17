@@ -4,6 +4,7 @@ import VueRouter from 'vue-router'
 import Home from '@/components/home/Home'
 import AdminPages from '@/components/admin/AdminPages'
 import TasksAdmin from '@/components/admin/TasksAdmin'
+import UserAdmin from '@/components/admin//UserAdmin'
 import ArticlesByCategory from '@/components/article/ArticlesByCategory'
 import ArticleById from '@/components/article/ArticleById'
 import Auth from '@/components/auth/Auth'
@@ -35,8 +36,13 @@ const routes = [{
 }
 , {
     name: 'TasksAdmin',
-    path: '/TasksAdmin',
+    path: '/tasksAdmin',
     component: TasksAdmin
+}
+, {
+    name: 'UserAdmin',
+    path: '/userAdmin',
+    component: UserAdmin
 }]
 
 const router = new VueRouter({

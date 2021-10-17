@@ -1,15 +1,15 @@
 <template>
     <div class="user-dropdown">
         <div class="user-button">
-            <span>{{ user.email }}</span>
+            <span>{{ user.nome }}</span>
             <div class="user-dropdown-img">
                 <Gravatar :email="user.email" alt="User" />
             </div>
             <i class="fa fa-angle-down"></i>
         </div>
         <div class="user-dropdown-content">
-            <router-link to="/admin">
-                <i class="fa fa-cogs"></i> Administração
+            <router-link to="/userAdmin">
+                <i class="fa fa-cogs"></i> Administrar perfil
             </router-link>
             <a href @click.prevent="logout"><i class="fa fa-sign-out"></i> Sair</a>
         </div>

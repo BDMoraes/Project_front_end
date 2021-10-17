@@ -8,9 +8,6 @@
                     <b-tab title="Diário" active>
                         <DailyAdmin />
                     </b-tab>
-                    <!-- <b-tab title="Tarefas">
-                        <TasksAdmin />
-                    </b-tab> -->
                 </b-tabs>
             </b-card>
         </div>

@@ -48,14 +48,13 @@ export default {
         reset() {
             this.mode = 'save'
             this.daily = {}
-            //this.loadDailys()
         },
         save() {
             const method = 'post'
             axios[method](`${baseApiUrl}/dailys`, this.daily)
                 .then(() => {
                     this.$toasted.global.defaultSuccess()
-                    this.$router.push({ path: 'TasksAdmin' })
+                    this.$router.push({ path: 'tasksAdmin' })
                 })
                 .catch(showError)
         },

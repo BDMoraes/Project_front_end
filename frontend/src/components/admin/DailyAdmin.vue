@@ -42,7 +42,7 @@ export default {
                 this.$router.push({ path: 'TasksAdmin' })
             }
             if (running.data) {
-                 this.$router.push({ path: '/' })
+                this.$router.push({ path: 'toDoList' })
             }
         },
         reset() {

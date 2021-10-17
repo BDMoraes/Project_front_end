@@ -29,7 +29,7 @@
                     :readonly="mode === 'remove'"/>
             </b-form-group>
             <b-form-group label="Entrega:" label-for="Task-entrega">
-               <b-form-input v-model="Task.entrega" required type="time" placeholder=""></b-form-input>
+               <b-form-input v-model="Task.entrega" required type="time" placeholder="" :readonly="mode === 'remove'"></b-form-input>
             </b-form-group>
             <b-button variant="primary" v-if="mode === 'save'"
                 @click="save">Salvar</b-button>
@@ -49,7 +49,7 @@
             </template>
         </b-table>
         <hr>
-        <b-button v-if="this.Tasks.length >= 3" variant="danger" class="ml-2" @click="reset">Gerar diário</b-button>
+        <b-button v-if="this.Tasks.length >= 3" variant="danger" class="ml-2" @click="gerar">Gerar diário</b-button>
     </div>
 </template>
 
@@ -64,6 +64,7 @@ export default {
     data: function() {
         return {
             mode: 'save',
+            daily: {},
             Task: {
                 status: 'aguardando',
             },
@@ -86,6 +87,8 @@ export default {
         async loadTasks() {
             const waiting = await axios.get(`${baseApiUrl}/query-waiting-dailys/${JSON.parse(localStorage.getItem(userKey)).id}`)
             this.Task.dailyId = waiting.data.id
+            this.daily.id = waiting.data.id
+            this.daily.titulo = waiting.data.titulo
             await axios.get(`${baseApiUrl}/query-waiting-tasks/${waiting.data.id}`)
                 .then(res => {
                 this.Task.dailyId = waiting.data.id
@@ -152,6 +155,18 @@ export default {
             let hora = value + ''
             let horaCerta = hora.replace(".", ":")
             return horaCerta
+        }
+        ,
+        async gerar(){
+            this.daily.userId = JSON.parse(localStorage.getItem(userKey)).id
+            this.daily.status = 'andamento'
+            await axios.put(`${baseApiUrl}/updateTasks/${this.daily.id}`)
+            await axios.put(`${baseApiUrl}/dailys/${this.daily.id}`, this.daily)
+                .then(() => {
+                    this.$toasted.global.defaultSuccess()
+                    this.$router.push({ path: 'toDoList' })
+                })
+                .catch(showError)
         }
     },
     mounted() {

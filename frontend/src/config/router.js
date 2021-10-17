@@ -5,8 +5,7 @@ import Home from '@/components/home/Home'
 import AdminPages from '@/components/admin/AdminPages'
 import TasksAdmin from '@/components/admin/TasksAdmin'
 import UserAdmin from '@/components/admin//UserAdmin'
-import ArticlesByCategory from '@/components/article/ArticlesByCategory'
-import ArticleById from '@/components/article/ArticleById'
+import ToDoList from '@/components/admin/ToDoList'
 import Auth from '@/components/auth/Auth'
 
 import { userKey } from '@/global'
@@ -22,14 +21,11 @@ const routes = [{
     path: '/admin',
     component: AdminPages,
 }, {
-    name: 'articlesByCategory',
-    path: '/categories/:id/articles',
-    component: ArticlesByCategory
-}, {
-    name: 'articleById',
-    path: '/articles/:id',
-    component: ArticleById
-}, {
+    name: 'toDoList',
+    path: '/toDoList',
+    component: ToDoList
+}, 
+    {
     name: 'auth',
     path: '/auth',
     component: Auth

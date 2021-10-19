@@ -1,77 +1,48 @@
 <template>
     <div class="user-admin">
         <PageTitle icon="fa fa-user" main="To Do List"
-            sub="Acompanhe e conclua seu diário" />
-        <b-form>
-            <input id="user-id" type="hidden" v-model="user.id" />
-            <b-row v-show="mode === 'save'">
-                <b-col md="6" sm="12">
-                    <b-form-group label="Senha:" label-for="user-senha">
-                        <b-form-input id="user-senha" type="password"
-                            v-model="user.senha"
-                            placeholder="Informe a nova senha do Usuário..." />
-                    </b-form-group>
-                </b-col>
-                <b-col md="6" sm="12">
-                    <b-form-group label="Confirmação de Senha:" 
-                        label-for="user-confirm-senha">
-                        <b-form-input id="user-confirm-senha" type="password"
-                            v-model="user.confirmSenha"
-                            placeholder="Confirme a nova senha do Usuário..." />
-                    </b-form-group>
-                </b-col>
-            </b-row>
-            <b-row>
-                <b-col xs="12">
-                    <b-button variant="success" v-if="mode === 'save'"
-                        @click="save">Salvar</b-button>
-                    <b-button class="ml-2" @click="reset">Cancelar</b-button>
-                </b-col>
-            </b-row>
-        </b-form>
+            sub="Acompanhe e conclua as tarefas do seu diário" />
+            <b-list-group>
+                <div v-for="task in tasks" :key="task.id">
+                    <b-list-group-item> 
+                        {{ task.titulo }} - {{ task.descricao }} - {{ task.entrega }}
+                    </b-list-group-item>
+                </div>
+            </b-list-group>
         <hr>
     </div>
 </template>
 
 <script>
-import { baseApiUrl, showError, userKey } from '@/global'
-import axios from 'axios'
-import PageTitle from '../template/PageTitle'
+//import { baseApiUrl, showError, userKey } from "@/global";
+//import axios from "axios";
+import PageTitle from "../template/PageTitle";
 
 export default {
-    nome: 'To Do List',
-    components: {PageTitle},
-    data: function() {
-        return {
-            mode: 'save',
-            user: {
-                nome: null
-            }
-        }
+  nome: "To Do List",
+  components: { PageTitle },
+  data: function() {
+    return {
+      tasks: [
+          {id: 1, titulo: 'titulo 1', descricao: 'faça isso 1', entrega: '02:30'},
+          {id: 2, titulo: 'titulo 2', descricao: 'faça isso 2', entrega: '02:30'},
+          {id: 3, titulo: 'titulo 3', descricao: 'faça isso 3', entrega: '02:30'},
+          {id: 4, titulo: 'titulo 4', descricao: 'faça isso 4', entrega: '02:30'},
+          {id: 5, titulo: 'titulo 5', descricao: 'faça isso 5', entrega: '02:30'},
+          {id: 6, titulo: 'titulo 6', descricao: 'faça isso 6', entrega: '02:30'}
+      ],
+    };
+  },
+  methods: {
+   loadTasks() {
+       
     },
-    methods: {
-        reset() {
-            this.mode = 'save'
-            this.user = {}
-            this.loadUsers()
-        },
-        save() {
-            this.user.nome = JSON.parse(localStorage.getItem(userKey)).nome
-            this.user.id = JSON.parse(localStorage.getItem(userKey)).id
-            this.user.email = JSON.parse(localStorage.getItem(userKey)).email
-            axios.put(`${baseApiUrl}/users/${this.user.id}`, this.user)
-                .then(() => {
-                    this.$toasted.global.defaultSuccess()
-                    this.reset()
-                })
-                .catch(showError)
-        },
-    },
-    mounted() {
-    }
-}
+  },
+  mounted() {
+      this.loadTasks();
+  },
+};
 </script>
 
 <style>
-
 </style>

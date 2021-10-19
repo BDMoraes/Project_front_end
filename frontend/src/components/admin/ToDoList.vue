@@ -35,7 +35,12 @@ export default {
   },
   methods: {
    loadTasks() {
-       
+       //carregar o diário em andamento
+       //passar o diário como referência para o normalize
+       //teremos a lista ordenada pelo campo sequenciamento das tarefas
+       //criar endpoint para retornar um array json com as tarefas do diário
+       //order by sequenciamento
+       //inserir esse array no *tasks* para o v-for 
     },
   },
   mounted() {

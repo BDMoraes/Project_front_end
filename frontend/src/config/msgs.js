@@ -17,3 +17,9 @@ Vue.toasted.register(
     payload => !payload.msg ? 'Erro inesperado.' : payload.msg,
     { type : 'error', icon : 'times' }
 )
+
+Vue.toasted.register(
+    'organizerSuccess',
+    payload => !payload.msg ? 'ordenação das tarefas realizada com sucesso!' : payload.msg,
+    { type: 'success', icon: 'check' }
+)

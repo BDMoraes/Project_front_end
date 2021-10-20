@@ -2,8 +2,8 @@
     <div class="auth-content">
         <div class="auth-modal">
             <img src="@/assets/logo.png" width="100" alt="Logo" />
-            <div class="auth-title">{{ showSignup ? 'Cadastro' : 'Login' }}</div>
-
+            <hr>
+            <div class="auth-title">{{ showSignup ? 'Cadastre-se' : 'Entrar' }}</div>
             <input v-if="showSignup" v-model="user.nome" type="text" placeholder="Nome">
             <input v-model="user.email" name="email" type="text" placeholder="E-mail">
             <input v-model="user.senha" name="senha" type="password" placeholder="Senha">
@@ -12,7 +12,7 @@
 
             <div class="auth-button">
                 <button v-if="showSignup" @click="signup">Registrar</button>
-                <button v-else @click="signin">Entrar</button>
+                <button v-else @click="signin">Login</button>
             </div>
            
             <a href @click.prevent="showSignup = !showSignup">
@@ -70,9 +70,9 @@ export default {
         background-color: rgb(255, 255, 255);
         width: 350px;
         padding: 35px;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+        box-shadow: 0 4px 7px rgba(0, 0, 0, 0.15);
         background-color: #abdafd71;
-
+        
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -86,18 +86,20 @@ export default {
     }
 
     .auth-modal input {
-        border: 1px solid rgb(49, 46, 46);
+        border: 1px solid rgb(37, 48, 149);
         width: 100%;
         margin-bottom: 15px;
         padding: 3px 8px;
         outline: none;
+        border-radius: 8px;
     }
 
     .auth-modal button {
         align-self: center;
-        background-color: #1c99ec;
+        background-color: #125581;
         color: #FFF;
         padding: 5px 15px;
+        border-radius: 8px;
     }
 
     .auth-modal a {

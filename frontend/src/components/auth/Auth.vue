@@ -11,8 +11,8 @@
                 type="password" placeholder="Confirme a Senha">
 
             <div class="auth-button">
-                <button v-if="showSignup" @click="signup">Registrar</button>
-                <button v-else @click="signin">Login</button>
+                <b-button variant="info" v-if="showSignup" @click="signup">Registrar</b-button>
+                <b-button variant="info" v-else @click="signin">Login</b-button>
             </div>
            
             <a href @click.prevent="showSignup = !showSignup">
@@ -96,7 +96,6 @@ export default {
 
     .auth-modal button {
         align-self: center;
-        background-color: #125581;
         color: #FFF;
         padding: 5px 15px;
         border-radius: 8px;

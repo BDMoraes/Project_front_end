@@ -46,7 +46,7 @@ export default {
     #menu {
         display: flex;
         flex-direction: column;
-        background: linear-gradient(to right, #232526, #414345);
+        background: linear-gradient(to left, #1e89be, #1b4977);
         justify-content: initial;
         align-items: initial;
         font-size: 25px;
@@ -61,7 +61,7 @@ export default {
     }
      #div:hover {
         text-decoration: none;
-        background-color: rgba(90, 88, 88, 0.87);
+        background-color: rgba(2,0,36,1);
     }
     #link {
         display: flex;

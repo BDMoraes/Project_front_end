@@ -1,6 +1,6 @@
 <template>
     <div class="user-admin">
-        <PageTitle icon="fa fa-clipboard" main="To Do List"
+        <PageTitle icon="fa fa-clipboard" main="Lista de tarefas"
             sub="Acompanhe e conclua as tarefas do seu diário" />
             <b-list-group>
                 <div v-for="task in tasks" :key="task.id">
@@ -39,10 +39,10 @@ export default {
         const waiting = await axios.get(`${baseApiUrl}/query-running-dailys/${JSON.parse(localStorage.getItem(userKey)).id}`)
         const id = waiting.data.id
         // await axios.post(`${baseApiUrl}/normalizies/${id}`)
-        //         .then(() => {
-        //             this.$toasted.global.organizerSuccess()
-        //         })
-        //         .catch(showError)
+        //          .then(() => {
+        //          this.$toasted.global.organizerSuccess()
+        //          })
+        //          .catch(showError)
         await axios.get(`${baseApiUrl}/query-ordanized-tasks/${id}`)
                 .then(res => {
                 this.tasks = res.data

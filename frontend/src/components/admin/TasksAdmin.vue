@@ -163,10 +163,18 @@ export default {
             await axios.put(`${baseApiUrl}/updateTasks/${this.daily.id}`)
             await axios.put(`${baseApiUrl}/dailys/${this.daily.id}`, this.daily)
                 .then(() => {
-                    this.$toasted.global.defaultSuccess()
+                    this.$toasted.global.organizerSuccess()
                     this.$router.push({ path: 'toDoList' })
                 })
                 .catch(showError)
+
+        // await axios.post(`${baseApiUrl}/normalizies/${this.daily.id}`)
+        //     .then(() => {
+        //         this.$toasted.global.organizerSuccess()
+        //         this.$router.push({ path: 'toDoList' })
+        //      })
+        //      .catch(showError)
+            
         }
     },
     mounted() {

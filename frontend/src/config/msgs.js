@@ -23,3 +23,9 @@ Vue.toasted.register(
     payload => !payload.msg ? 'ordenação das tarefas realizada com sucesso!' : payload.msg,
     { type: 'success', icon: 'check' }
 )
+
+Vue.toasted.register(
+    'taskSuccess',
+    payload => !payload.msg ? 'Parabéns! Tarefa concluída!' : payload.msg,
+    { type: 'success', icon: 'check' }
+)

@@ -38,12 +38,6 @@ export default {
    async loadTasks() {
         const waiting = await axios.get(`${baseApiUrl}/query-running-dailys/${JSON.parse(localStorage.getItem(userKey)).id}`)
         const id = waiting.data.id
-        
-        await axios.post(`${baseApiUrl}/normalizies/${id}`)
-            .then(() => {
-                this.$toasted.global.organizerSuccess()
-            })
-            .catch(showError)
 
         await axios.get(`${baseApiUrl}/query-ordanized-tasks/${id}`)
                 .then(res => {

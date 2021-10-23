@@ -54,135 +54,153 @@
 </template>
 
 <script>
-import { baseApiUrl, showError, userKey } from '@/global'
-import axios from 'axios'
-import PageTitle from '../template/PageTitle'
+import { baseApiUrl, showError, userKey } from "@/global";
+import axios from "axios";
+import PageTitle from "../template/PageTitle";
 
 export default {
-    titulo: 'TasksAdmin',
-    components: {PageTitle},
-    data: function() {
-        return {
-            mode: 'save',
-            daily: {},
-            Task: {
-                status: 'aguardando',
-            },
-            Tasks: [],
-            fields: [
-                { key: 'titulo', label: 'Titulo'},
-                { key: 'descricao', label: 'Descricao'},
-                { key: 'localizacao', label: 'Localização', sortable: true, formatter: 'formatLocalizacao'},
-                { key: 'prioridade', label: 'Prioridade', sortable: true, formatter: 'formatPrioridade'},
-                { key: 'entrega', label: 'Entrega', formatter: 'formatHora'},
-                { key: 'actions', label: 'Ações' }
-            ],
-             selectedLoc: null,
-             selectedPri: null,
-             locais: [{ text: 'Selecione', value: null }, { text: 'Atual', value: 1 }, { text: 'Perto', value: 2 }, { text: 'Longe', value: 3 }],
-             prioridades: [{ text: 'Selecione', value: null },{ text: 'Alta', value: 1}, { text: 'Média', value: 2 }, { text: 'Baixa', value: 3 }],
-        }
+  titulo: "TasksAdmin",
+  components: { PageTitle },
+  data: function() {
+    return {
+      mode: "save",
+      daily: {},
+      Task: {
+        status: "aguardando",
+      },
+      Tasks: [],
+      fields: [
+        { key: "titulo", label: "Titulo" },
+        { key: "descricao", label: "Descricao" },
+        {
+          key: "localizacao",
+          label: "Localização",
+          sortable: true,
+          formatter: "formatLocalizacao",
+        },
+        {
+          key: "prioridade",
+          label: "Prioridade",
+          sortable: true,
+          formatter: "formatPrioridade",
+        },
+        { key: "entrega", label: "Entrega", formatter: "formatHora" },
+        { key: "actions", label: "Ações" },
+      ],
+      selectedLoc: null,
+      selectedPri: null,
+      locais: [
+        { text: "Selecione", value: null },
+        { text: "Atual", value: 1 },
+        { text: "Perto", value: 2 },
+        { text: "Longe", value: 3 },
+      ],
+      prioridades: [
+        { text: "Selecione", value: null },
+        { text: "Alta", value: 1 },
+        { text: "Média", value: 2 },
+        { text: "Baixa", value: 3 },
+      ],
+    };
+  },
+  methods: {
+    async loadTasks() {
+      const waiting = await axios.get(
+        `${baseApiUrl}/query-waiting-dailys/${
+          JSON.parse(localStorage.getItem(userKey)).id
+        }`
+      );
+      this.Task.dailyId = waiting.data.id;
+      this.daily.id = waiting.data.id;
+      this.daily.titulo = waiting.data.titulo;
+      await axios
+        .get(`${baseApiUrl}/query-waiting-tasks/${waiting.data.id}`)
+        .then((res) => {
+          this.Task.dailyId = waiting.data.id;
+          this.Tasks = res.data;
+        });
     },
-    methods: {
-        async loadTasks() {
-            const waiting = await axios.get(`${baseApiUrl}/query-waiting-dailys/${JSON.parse(localStorage.getItem(userKey)).id}`)
-            this.Task.dailyId = waiting.data.id
-            this.daily.id = waiting.data.id
-            this.daily.titulo = waiting.data.titulo
-            await axios.get(`${baseApiUrl}/query-waiting-tasks/${waiting.data.id}`)
-                .then(res => {
-                this.Task.dailyId = waiting.data.id
-                this.Tasks = res.data
-            })
-        },
-        reset() {
-            this.mode = 'save'
-            this.Task = { status: 'aguardando'}
-            this.selectedLoc = null
-            this.selectedPri = null
-            this.loadTasks()
-        },
-        save() {
-            this.Task.prioridade = this.selectedPri
-            this.Task.localizacao = this.selectedLoc
-            const method = this.Task.id ? 'put' : 'post'
-            const id = this.Task.id ? `/${this.Task.id}` : ''
-            axios[method](`${baseApiUrl}/tasks${id}`, this.Task)
-                .then(() => {
-                    this.$toasted.global.defaultSuccess()
-                    this.reset()
-                })
-                .catch(showError)
-        },
-        remove() {
-            const id = this.Task.id
-            axios.delete(`${baseApiUrl}/tasks/${id}`)
-                .then(() => {
-                    this.$toasted.global.defaultSuccess()
-                    this.reset()
-                })
-                .catch(showError)
-        },
-        loadTask(Task, mode = 'save') {
-            this.mode = mode
-            this.Task = { ...Task }
-            this.Task.entrega = this.formatHora(this.Task.entrega)
-            this.selectedLoc = this.Task.localizacao
-            this.selectedPri = this.Task.prioridade
-            if(this.Task.entrega.length < 5){
-                this.Task.entrega = '0' + this.Task.entrega
-            }
-        },
-        formatPrioridade(value){
-            if (value === 1) {
-                return 'Alta';
-            } else if(value === 2) {
-                return 'Média'
-            }else{
-             return 'Baixa'
-            }
-        },
-        formatLocalizacao(value){
-            if (value === 1) {
-                return 'Atual';
-            } else if(value === 2) {
-                return 'Perto'
-            }else{
-             return 'Longe'
-            }
-        },
-        formatHora(value){
-            let hora = value + ''
-            let horaCerta = hora.replace(".", ":")
-            return horaCerta
-        }
-        ,
-        async gerar(){
-            this.daily.userId = JSON.parse(localStorage.getItem(userKey)).id
-            this.daily.status = 'andamento'
-            await axios.put(`${baseApiUrl}/updateTasks/${this.daily.id}`)
-            await axios.put(`${baseApiUrl}/dailys/${this.daily.id}`, this.daily)
-                .then(() => {
-                    this.$toasted.global.organizerSuccess()
-                    this.$router.push({ path: 'toDoList' })
-                })
-                .catch(showError)
-
-        // await axios.post(`${baseApiUrl}/normalizies/${this.daily.id}`)
-        //     .then(() => {
-        //         this.$toasted.global.organizerSuccess()
-        //         this.$router.push({ path: 'toDoList' })
-        //      })
-        //      .catch(showError)
-            
-        }
+    reset() {
+      this.mode = "save";
+      this.Task = { status: "aguardando" };
+      this.selectedLoc = null;
+      this.selectedPri = null;
+      this.loadTasks();
     },
-    mounted() {
-        this.loadTasks()
-    }
-}
+    save() {
+      this.Task.prioridade = this.selectedPri;
+      this.Task.localizacao = this.selectedLoc;
+      const method = this.Task.id ? "put" : "post";
+      const id = this.Task.id ? `/${this.Task.id}` : "";
+      axios[method](`${baseApiUrl}/tasks${id}`, this.Task)
+        .then(() => {
+          this.$toasted.global.defaultSuccess();
+          this.reset();
+        })
+        .catch(showError);
+    },
+    remove() {
+      const id = this.Task.id;
+      axios
+        .delete(`${baseApiUrl}/tasks/${id}`)
+        .then(() => {
+          this.$toasted.global.defaultSuccess();
+          this.reset();
+        })
+        .catch(showError);
+    },
+    loadTask(Task, mode = "save") {
+      this.mode = mode;
+      this.Task = { ...Task };
+      this.Task.entrega = this.formatHora(this.Task.entrega);
+      this.selectedLoc = this.Task.localizacao;
+      this.selectedPri = this.Task.prioridade;
+      if (this.Task.entrega.length < 5) {
+        this.Task.entrega = "0" + this.Task.entrega;
+      }
+    },
+    formatPrioridade(value) {
+      if (value === 1) {
+        return "Alta";
+      } else if (value === 2) {
+        return "Média";
+      } else {
+        return "Baixa";
+      }
+    },
+    formatLocalizacao(value) {
+      if (value === 1) {
+        return "Atual";
+      } else if (value === 2) {
+        return "Perto";
+      } else {
+        return "Longe";
+      }
+    },
+    formatHora(value) {
+      let hora = value + "";
+      let horaCerta = hora.replace(".", ":");
+      return horaCerta;
+    },
+    async gerar() {
+      this.daily.userId = JSON.parse(localStorage.getItem(userKey)).id;
+      this.daily.status = "andamento";
+      await axios.put(`${baseApiUrl}/updateTasks/${this.daily.id}`);
+      await axios.put(`${baseApiUrl}/dailys/${this.daily.id}`, this.daily);
+      await axios
+        .post(`${baseApiUrl}/normalizies/${this.daily.id}`)
+        .then(() => {
+          this.$toasted.global.organizerSuccess();
+          this.$router.push({ path: "toDoList" });
+        })
+        .catch(showError);
+    },
+  },
+  mounted() {
+    this.loadTasks();
+  },
+};
 </script>
 
 <style>
-
 </style>

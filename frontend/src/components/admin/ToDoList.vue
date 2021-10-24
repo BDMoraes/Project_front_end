@@ -45,7 +45,7 @@ export default {
         }`
       );
 
-      if (!waiting) {
+      if (waiting.data.length === 0) {
         this.$router.push({ path: "adminPages" });
       }
       this.daily.id = waiting.data.id;
@@ -79,15 +79,17 @@ export default {
         task
       );
 
-      if (finalize.data.id) {
+      if (finalize.data) {
         this.$toasted.global.dailySuccess();
       }
 
       this.$toasted.global.taskSuccess();
 
-    this.tasks = this.tasks.filter(function( obj ) {
-      return obj.id !== task.id;
-});
+      this.tasks = this.tasks.filter(function(obj) {
+        return obj.id !== task.id;
+      });
+
+      this.loadTasks();
     },
   },
   mounted() {

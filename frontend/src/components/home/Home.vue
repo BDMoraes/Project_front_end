@@ -1,43 +1,67 @@
 <template>
-    <div class="home">
-        <PageTitle icon="fa fa-home" main="Dashboard"
-            sub="Task Organizer" />
-        <div class="stats">
-            <Stat title="Categorias" :value="stat.categories"
-                icon="fa fa-folder" color="#d54d50" />
-        </div>
+    <div>
+        <PageTitle icon="fa fa-folder" main="Dashboard"
+            sub="Relatórios de diários concluídos" />
+            <b-list-group>
+                <div v-for="daily in dailys" :key="daily.id">
+                    <b-list-group-item class="task-cards"> 
+                        <div>
+                            <div> {{ daily.titulo }} </div> 
+                        </div>
+                        <hr>
+                        <div>
+                             <b-button variant="info" @click="load()" size="sm">
+                                Expandir
+                             </b-button>
+                        </div> 
+                    </b-list-group-item> 
+                </div>
+            </b-list-group>
     </div>
 </template>
 
 <script>
-import PageTitle from '../template/PageTitle'
-import Stat from './Stat'
-import axios from 'axios'
-import { baseApiUrl } from '@/global'
+import PageTitle from "../template/PageTitle";
+import axios from "axios";
+import { baseApiUrl, userKey } from "@/global";
 
 export default {
-    name: 'Home',
-    components: { PageTitle, Stat },
-    data: function() {
-        return {
-            stat: {}
-        }
+  name: "Home",
+  components: { PageTitle },
+  data: function() {
+    return {
+      dailys: [],
+    };
+  },
+  methods: {
+    async getStats() {
+      const data = await axios.get(
+        `${baseApiUrl}/query-complete-dailys/${
+          JSON.parse(localStorage.getItem(userKey)).id
+        }`
+      );
+      this.dailys = data.data;
     },
-    methods: {
-        getStats() {
-            axios.get(`${baseApiUrl}/stats`).then(res => this.stat = res.data)
-        }
-    },
-    mounted() {
-        this.getStats()
-    }
-}
+    load() {},
+  },
+  mounted() {
+    this.getStats();
+  },
+};
 </script>
 
 <style>
-    .stats {
-        display: flex;
-        justify-content: space-between;
-        flex-wrap: wrap;
-    }
+.task-cards {
+  background-color: rgba(191, 206, 243, 0.671);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 7px;
+  font-size: 18px;
+  box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px,
+    rgba(0, 0, 0, 0.22) 0px 15px 12px;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-weight: bold;
+}
 </style>

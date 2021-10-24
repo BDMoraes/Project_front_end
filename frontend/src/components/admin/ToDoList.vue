@@ -10,7 +10,7 @@
                         </div>
                         <hr>
                         <div>
-                             <b-button variant="outline-info" @click="load()" size="sm">
+                             <b-button variant="outline-info" @click="concluir(task)" size="sm">
                                 <i class="fa fa-check"></i>
                              </b-button>
                         </div> 
@@ -32,30 +32,60 @@ export default {
   data: function() {
     return {
       tasks: [],
+      daily: {},
     };
   },
   methods: {
-   async loadTasks() {
-        const waiting = await axios.get(`${baseApiUrl}/query-running-dailys/${JSON.parse(localStorage.getItem(userKey)).id}`)
-        const id = waiting.data.id
+    async loadTasks() {
+      const waiting = await axios.get(
+        `${baseApiUrl}/query-running-dailys/${
+          JSON.parse(localStorage.getItem(userKey)).id
+        }`
+      );
 
-        await axios.get(`${baseApiUrl}/query-ordanized-tasks/${id}`)
-                .then(res => {
-                this.tasks = res.data
-            })
-            .catch(showError)
+      if (!waiting) {
+        this.$router.push({ path: "adminPages" });
+      }
+      this.daily.id = waiting.data.id;
+
+      await axios
+        .get(`${baseApiUrl}/query-ordanized-tasks/${this.daily.id}`)
+        .then((res) => {
+          this.tasks = res.data;
+        })
+        .catch(showError);
     },
-    formatHora(value){
-            let hora = value + ''
-            let horaCerta = hora.replace(".", ":")
-            return horaCerta
-        },
-    load(){
-        this.$toasted.global.taskSuccess()
-    }
+    formatHora(value) {
+      let hora = value + "";
+      let horaCerta = hora.replace(".", ":");
+      return horaCerta;
+    },
+
+    async concluir(task) {
+      const data = new Date();
+      let hora = data.getHours() + "." + data.getMinutes();
+      hora = parseFloat(hora);
+
+      if (hora > parseFloat(task.entrega)) {
+        task.noPrazo = 0;
+      } else {
+        task.noPrazo = 1;
+      }
+
+      const finalize = await axios.put(
+        `${baseApiUrl}/finalizeTasks/${this.daily.id}`,
+        task
+      );
+
+      if (finalize.data.id) {
+        this.$toasted.global.dailySuccess();
+      }
+
+      this.$toasted.global.taskSuccess();
+    },
   },
   mounted() {
-      this.loadTasks();
+    this.loadTasks();
   },
 };
 </script>

@@ -29,3 +29,9 @@ Vue.toasted.register(
     payload => !payload.msg ? 'Parabéns! Tarefa concluída!' : payload.msg,
     { type: 'success', icon: 'check' }
 )
+
+Vue.toasted.register(
+    'dailySuccess',
+    payload => !payload.msg ? 'Parabéns! Diário concluído!' : payload.msg,
+    { type: 'success', icon: 'check' }
+)

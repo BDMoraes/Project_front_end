@@ -4,9 +4,11 @@
             sub="Acompanhe e conclua as tarefas do seu diário" />
             <b-list-group>
                 <div v-for="task in tasks" :key="task.id">
-                    <b-list-group-item> 
-                        <div>
-                            {{ task.titulo }} - {{ task.descricao }} - {{ task.entrega }}
+                    <b-list-group-item class="task-cards"> 
+                        <div class="task-texts" >
+                            <div id="divt"> {{ task.titulo }} </div> 
+                            <div id="divd"> {{ task.descricao }} </div> 
+                            <div id="dive"> {{ task.entrega }} </div>
                         </div>
                         <hr>
                         <div>
@@ -91,4 +93,38 @@ export default {
 </script>
 
 <style>
+.task-cards {
+  background-color: rgba(191, 206, 243, 0.671);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 7px;
+  font-size: 18px;
+  box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px,
+    rgba(0, 0, 0, 0.22) 0px 15px 12px;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-weight: bold;
+}
+.task-texts {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+.task-texts div {
+  margin-right: 10px;
+  box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
+    rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
+}
+
+#divt {
+  background-color: rgb(95, 148, 218);
+}
+#divd {
+  background-color: rgb(206, 226, 94);
+}
+#dive {
+  background-color: rgb(200, 92, 173);
+}
 </style>

@@ -84,6 +84,10 @@ export default {
       }
 
       this.$toasted.global.taskSuccess();
+
+    this.tasks = this.tasks.filter(function( obj ) {
+      return obj.id !== task.id;
+});
     },
   },
   mounted() {

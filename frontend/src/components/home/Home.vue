@@ -6,11 +6,18 @@
                 <div v-for="daily in dailys" :key="daily.id">
                     <b-list-group-item class="task-cards"> 
                         <div>
-                            <div> {{ daily.titulo }} </div> 
+                            <div> 
+                              <h4> {{ daily.titulo }} </h4>
+                            </div> 
+                        </div>
+                        <div class="task-stats" v-if="mostrar === daily.id">
+                            <div id="total-layout"> Total de tarefas do diário: {{ tasks.total }} </div> 
+                            <div id="noPrazo-layout"> Total de tarefas no prazo: {{ tasks.noPrazo }} </div>
+                            <div id="foraPrazo-layout"> Total de tarefas fora do prazo: {{ tasks.foraPrazo }} </div>
                         </div>
                         <hr>
                         <div>
-                             <b-button variant="info" @click="load()" size="sm">
+                             <b-button variant="info" @click="load(daily)" size="sm">
                                 Expandir
                              </b-button>
                         </div> 
@@ -31,18 +38,46 @@ export default {
   data: function() {
     return {
       dailys: [],
+      tasks: {
+        noPrazo: 0,
+        foraPrazo: 0,
+        total: 0,
+      },
+      mostrar: 0,
+      id_user: 0,
     };
   },
   methods: {
     async getStats() {
-      const data = await axios.get(
-        `${baseApiUrl}/query-complete-dailys/${
-          JSON.parse(localStorage.getItem(userKey)).id
-        }`
+      this.id_user = JSON.parse(localStorage.getItem(userKey)).id;
+
+      const d_data = await axios.get(
+        `${baseApiUrl}/query-complete-dailys/${this.id_user}`
       );
-      this.dailys = data.data;
+      this.dailys = d_data.data;
     },
-    load() {},
+    async load(daily) {
+      this.mostrar = daily.id;
+
+      this.reset();
+
+      const t_data = await axios.get(
+        `${baseApiUrl}/query-complete-tasks/${daily.id}`
+      );
+      this.tasks.total = t_data.data.length;
+      for (let index = 0; index < t_data.data.length; index++) {
+        if (t_data.data[index].noPrazo === 1) {
+          this.tasks.noPrazo++;
+        } else {
+          this.tasks.foraPrazo++;
+        }
+      }
+    },
+    reset() {
+      this.tasks.noPrazo = 0;
+      this.tasks.foraPrazo = 0;
+      this.tasks.total = 0;
+    },
   },
   mounted() {
     this.getStats();
@@ -63,5 +98,30 @@ export default {
     rgba(0, 0, 0, 0.22) 0px 15px 12px;
   font-family: Verdana, Geneva, Tahoma, sans-serif;
   font-weight: bold;
+}
+.task-stats {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10px;
+  font-size: 18px;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-weight: bold;
+}
+.task-stats div {
+  margin-top: 10px;
+  padding: 7px;
+  border-radius: 10px 40px 40px 10px;
+}
+
+#total-layout {
+  background-color: rgba(19, 57, 228, 0.835);
+}
+#noPrazo-layout {
+  background-color: rgba(19, 228, 54, 0.835);
+}
+#foraPrazo-layout {
+  background-color: rgba(228, 43, 19, 0.835);
 }
 </style>

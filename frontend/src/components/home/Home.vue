@@ -18,7 +18,7 @@
                         <hr>
                         <div>
                              <b-button variant="info" @click="load(daily)" size="sm">
-                                Expandir
+                                Detalhar
                              </b-button>
                         </div> 
                     </b-list-group-item> 

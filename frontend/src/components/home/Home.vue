@@ -7,7 +7,7 @@
                     <b-list-group-item class="task-cards"> 
                         <div>
                             <div> 
-                              <h4> {{ daily.titulo }} </h4>
+                              <h4> {{ daily.titulo }} - {{ daily.data }} </h4>
                             </div> 
                         </div>
                         <div class="task-stats" v-if="mostrar === daily.id">
@@ -55,6 +55,10 @@ export default {
         `${baseApiUrl}/query-complete-dailys/${this.id_user}`
       );
       this.dailys = d_data.data;
+
+      for (let index = 0; index < d_data.data.length; index++) {
+        d_data.data[index].data = this.formatData(d_data.data[index].data);
+      }
     },
     async load(daily) {
       this.mostrar = daily.id;
@@ -77,6 +81,19 @@ export default {
       this.tasks.noPrazo = 0;
       this.tasks.foraPrazo = 0;
       this.tasks.total = 0;
+    },
+    formatData(value) {
+      let data = value + "";
+      let dataCerta = data.replace(".", "/");
+      if (dataCerta.substring(4, 5) === "0") {
+        let sub = parseInt(dataCerta.substring(3, 4)) + 1;
+        dataCerta = dataCerta.substring(0, 3) + '' + sub;
+      }else{
+        let sub = parseInt(dataCerta.substring(3, 5)) + 1;
+        dataCerta = dataCerta.substring(0, 3) + '' + sub;
+      }
+
+      return dataCerta;
     },
   },
   mounted() {

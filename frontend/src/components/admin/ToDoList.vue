@@ -3,8 +3,9 @@
         <PageTitle icon="fa fa-clipboard" main="Lista de tarefas"
             sub="Acompanhe e conclua as tarefas do seu diário" />
             <b-list-group>
-                <div v-for="task in tasks" :key="task.id">
+                <div v-for="(task, index) in tasks" :key="task.id">
                     <b-list-group-item class="task-cards"> 
+                      <div id="classification"> {{ index + 1 }} º </div> 
                         <div class="task-texts" >
                             <div id="divt"> {{ task.titulo }} </div> 
                             <div id="divd"> {{ task.descricao }} </div> 
@@ -35,6 +36,7 @@ export default {
     return {
       tasks: [],
       daily: {},
+      num: { v: 0 },
     };
   },
   methods: {
@@ -49,11 +51,15 @@ export default {
         this.$router.push({ path: "adminPages" });
       }
       this.daily.id = waiting.data.id;
+      this.daily.data = waiting.data.data;
 
       await axios
         .get(`${baseApiUrl}/query-ordanized-tasks/${this.daily.id}`)
         .then((res) => {
           this.tasks = res.data;
+          for (let index = 0; index < res.data.length; index++) {
+            this.tasks[index].entrega = this.formatHora(this.tasks[index].entrega)
+          }
         })
         .catch(showError);
     },
@@ -62,13 +68,21 @@ export default {
       let horaCerta = hora.replace(".", ":");
       return horaCerta;
     },
-
+    getNum() {
+      this.num.v = this.num.v + 1;
+      return this.num.v;
+    },
     async concluir(task) {
       const data = new Date();
       let hora = data.getHours() + "." + data.getMinutes();
       hora = parseFloat(hora);
+      task.finalizacao = hora;
 
-      if (hora > parseFloat(task.entrega)) {
+      const dia = data.getDate();
+      const mes = data.getMonth();
+      const dataTask = parseFloat(dia + "." + mes);
+
+      if (hora > parseFloat(task.entrega) || dataTask > this.daily.data) {
         task.noPrazo = 0;
       } else {
         task.noPrazo = 1;
@@ -122,6 +136,10 @@ export default {
   margin-right: 10px;
   box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
     rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
+}
+#classification {
+   margin-bottom: 40px;
+   font-size: 20px;
 }
 
 #divt {

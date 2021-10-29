@@ -58,6 +58,11 @@ export default {
       this.daily = {};
     },
     save() {
+      const now = new Date();
+      const dia = now.getDate();
+      const mes = now.getMonth();
+      const data = parseFloat(dia + "." + mes);
+      this.daily.data = data;
       const method = "post";
       axios[method](`${baseApiUrl}/dailys`, this.daily)
         .then(() => {

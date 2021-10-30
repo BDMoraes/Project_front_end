@@ -49,7 +49,7 @@
             </template>
         </b-table>
         <hr>
-        <b-button v-if="this.Tasks.length >= 3" variant="danger" class="ml-2" @click="gerar">Gerar diário</b-button>
+        <b-button v-if="this.Tasks.length >= 3" block variant="success" class="ml-2" @click="gerar">Gerar diário</b-button>
     </div>
 </template>
 

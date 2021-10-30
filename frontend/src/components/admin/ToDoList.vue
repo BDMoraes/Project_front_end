@@ -13,7 +13,7 @@
                         </div>
                         <hr>
                         <div>
-                             <b-button variant="outline-info" @click="concluir(task)" size="sm">
+                             <b-button variant="success" @click="concluir(task)" size="md">
                                 <i class="fa fa-check"></i>
                              </b-button>
                         </div> 

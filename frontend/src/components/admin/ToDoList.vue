@@ -50,15 +50,18 @@ export default {
       if (waiting.data.length === 0) {
         this.$router.push({ path: "adminPages" });
       }
+
       this.daily.id = waiting.data.id;
       this.daily.data = waiting.data.data;
 
       await axios
-        .get(`${baseApiUrl}/query-ordanized-tasks/${this.daily.id}`)
+        .get(`${baseApiUrl}/query-organized-tasks/${this.daily.id}`)
         .then((res) => {
           this.tasks = res.data;
           for (let index = 0; index < res.data.length; index++) {
-            this.tasks[index].entrega = this.formatHora(this.tasks[index].entrega)
+            this.tasks[index].entrega = this.formatHora(
+              this.tasks[index].entrega
+            );
           }
         })
         .catch(showError);
@@ -73,6 +76,7 @@ export default {
       return this.num.v;
     },
     async concluir(task) {
+      const flag = { v: true };
       const data = new Date();
       let hora = data.getHours() + "." + data.getMinutes();
       hora = parseFloat(hora);
@@ -93,17 +97,22 @@ export default {
         task
       );
 
+      this.$toasted.global.taskSuccess();
+
       if (finalize.data) {
         this.$toasted.global.dailySuccess();
+        flag.v = false;
       }
-
-      this.$toasted.global.taskSuccess();
 
       this.tasks = this.tasks.filter(function(obj) {
         return obj.id !== task.id;
       });
 
-      this.loadTasks();
+      if (!flag.v) {
+        this.$router.push({ path: "adminPages" });
+      } else {
+        this.loadTasks();
+      }
     },
   },
   mounted() {
@@ -138,8 +147,8 @@ export default {
     rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
 }
 #classification {
-   margin-bottom: 40px;
-   font-size: 20px;
+  margin-bottom: 40px;
+  font-size: 20px;
 }
 
 #divt {

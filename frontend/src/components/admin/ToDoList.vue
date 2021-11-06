@@ -123,7 +123,7 @@ export default {
 
 <style>
 .task-cards {
-  background-color: rgba(191, 206, 243, 0.671);
+  background-color: rgba(80, 162, 238, 0.377);
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -155,9 +155,9 @@ export default {
   background-color: rgb(95, 148, 218);
 }
 #divd {
-  background-color: rgb(206, 226, 94);
+  background-color: rgb(203, 224, 82);
 }
 #dive {
-  background-color: rgb(200, 92, 173);
+  background-color: rgb(219, 156, 84);
 }
 </style>

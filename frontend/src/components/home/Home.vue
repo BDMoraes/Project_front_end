@@ -1,6 +1,6 @@
 <template>
     <div>
-        <PageTitle icon="fa fa-folder" main="Dashboard"
+        <PageTitle icon="fa fa-folder" main="Painel de relatórios"
             sub="Relatórios de diários concluídos" />
             <b-list-group>
                 <div v-for="daily in dailys" :key="daily.id">
@@ -14,10 +14,13 @@
                             <div id="total-layout"> Total de tarefas do diário: {{ tasks.total }} </div> 
                             <div id="noPrazo-layout"> Total de tarefas no prazo: {{ tasks.noPrazo }} </div>
                             <div id="foraPrazo-layout"> Total de tarefas fora do prazo: {{ tasks.foraPrazo }} </div>
+                            <div>
+                              {{ ((tasks.noPrazo * 100) / tasks.total).toFixed(2) }} % de produtividade
+                            </div>
                         </div>
                         <hr>
                         <div>
-                             <b-button variant="info" @click="load(daily)" size="sm">
+                             <b-button variant="info" @click="load(daily)">
                                 Detalhar
                              </b-button>
                         </div> 
@@ -45,6 +48,8 @@ export default {
       },
       mostrar: 0,
       id_user: 0,
+      value: 10,
+      max: 100
     };
   },
   methods: {
@@ -104,7 +109,7 @@ export default {
 
 <style>
 .task-cards {
-  background-color: rgba(191, 206, 243, 0.671);
+  background-color: rgba(46, 140, 228, 0.445);
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -141,4 +146,5 @@ export default {
 #foraPrazo-layout {
   background-color: rgba(228, 43, 19, 0.835);
 }
+
 </style>

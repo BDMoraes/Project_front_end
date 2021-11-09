@@ -49,6 +49,9 @@
             </template>
         </b-table>
         <hr>
+         <div v-if="this.Tasks.length < 3" class="not-yet"> 
+                <h4>Falta(m) {{Math.abs(this.Tasks.length - 3)}} tarefa(s) para a geração do diário</h4>
+         </div> 
         <b-button v-if="this.Tasks.length >= 3" block variant="success" class="ml-2" @click="gerar">Gerar diário</b-button>
     </div>
 </template>
@@ -203,4 +206,9 @@ export default {
 </script>
 
 <style>
+.not-yet{
+  color: rgba(200, 25, 25, 0.911);
+  font-weight: bold;
+  font-style: italic;
+}
 </style>

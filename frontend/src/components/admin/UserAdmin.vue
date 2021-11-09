@@ -24,7 +24,7 @@
             <b-row>
                 <b-col xs="12">
                     <b-button variant="success" v-if="mode === 'save'"
-                        @click="save">Salvar</b-button>
+                        @click="save()">Salvar</b-button>
                     <b-button class="ml-2" @click="reset">Cancelar</b-button>
                 </b-col>
             </b-row>
@@ -53,7 +53,6 @@ export default {
     reset() {
       this.mode = "save";
       this.user = {};
-      this.loadUsers();
     },
     save() {
       this.user.nome = JSON.parse(localStorage.getItem(userKey)).nome;

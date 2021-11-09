@@ -20,53 +20,51 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState } from "vuex";
 
 export default {
-    name: 'Menu',
-    computed: mapState(['isMenuVisible']),
-    methods: {
-        onNodeSelect(node) {
-            this.$router.push({
-                name: 'articlesByCategory',
-                params: { id: node.id }
-            })
+  name: "Menu",
+  computed: mapState(["isMenuVisible"]),
+  methods: {
+    onNodeSelect(node) {
+      this.$router.push({
+        name: "articlesByCategory",
+        params: { id: node.id },
+      });
 
-            if(this.$mq === 'xs' || this.$mq === 'sm') {
-                this.$store.commit('toggleMenu', false)
-            }
-        }
+      if (this.$mq === "xs" || this.$mq === "sm") {
+        this.$store.commit("toggleMenu", false);
+      }
     },
-    mounted() {
-    }
-}
+  },
+  mounted() {},
+};
 </script>
 
 <style>
-    #menu {
-        display: flex;
-        flex-direction: column;
-        background: linear-gradient(to left, #1e89be, #1b4977);
-        justify-content: initial;
-        align-items: initial;
-        font-size: 25px;
-    }
-    #menu div {
-        flex-wrap: wrap;
-        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-    }  
-    #menu a {
-        color: rgb(213, 230, 230);
-        text-decoration: none;
-    }
-     #div:hover {
-        text-decoration: none;
-        background-color: rgba(2,0,36,1);
-    }
-    #link {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-
+#menu {
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(to left, #1e89be, #1b4977);
+  justify-content: initial;
+  align-items: initial;
+  font-size: 25px;
+}
+#menu div {
+  flex-wrap: wrap;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+}
+#menu a {
+  color: rgb(213, 230, 230);
+  text-decoration: none;
+}
+#div:hover {
+  text-decoration: none;
+  background-color: rgba(2, 0, 36, 1);
+}
+#link {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 </style>

@@ -34,44 +34,43 @@
 </template>
 
 <script>
-import { baseApiUrl, showError, userKey } from '@/global'
-import axios from 'axios'
-import PageTitle from '../template/PageTitle'
+import { baseApiUrl, showError, userKey } from "@/global";
+import axios from "axios";
+import PageTitle from "../template/PageTitle";
 
 export default {
-    nome: 'UserAdmin',
-    components: {PageTitle},
-    data: function() {
-        return {
-            mode: 'save',
-            user: {
-                nome: null
-            }
-        }
+  nome: "UserAdmin",
+  components: { PageTitle },
+  data: function() {
+    return {
+      mode: "save",
+      user: {
+        //nome: null,
+      },
+    };
+  },
+  methods: {
+    reset() {
+      this.mode = "save";
+      this.user = {};
+      this.loadUsers();
     },
-    methods: {
-        reset() {
-            this.mode = 'save'
-            this.user = {}
-            this.loadUsers()
-        },
-        save() {
-            this.user.nome = JSON.parse(localStorage.getItem(userKey)).nome
-            this.user.id = JSON.parse(localStorage.getItem(userKey)).id
-            this.user.email = JSON.parse(localStorage.getItem(userKey)).email
-            axios.put(`${baseApiUrl}/users/${this.user.id}`, this.user)
-                .then(() => {
-                    this.$toasted.global.defaultSuccess()
-                    this.reset()
-                })
-                .catch(showError)
-        },
+    save() {
+      this.user.nome = JSON.parse(localStorage.getItem(userKey)).nome;
+      this.user.id = JSON.parse(localStorage.getItem(userKey)).id;
+      this.user.email = JSON.parse(localStorage.getItem(userKey)).email;
+      axios
+        .put(`${baseApiUrl}/users/${this.user.id}`, this.user)
+        .then(() => {
+          this.$toasted.global.defaultSuccess();
+          this.reset();
+        })
+        .catch(showError);
     },
-    mounted() {
-    }
-}
+  },
+  mounted() {},
+};
 </script>
 
 <style>
-
 </style>

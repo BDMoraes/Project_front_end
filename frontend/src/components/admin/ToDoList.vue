@@ -2,6 +2,9 @@
     <div class="user-admin">
         <PageTitle icon="fa fa-clipboard" main="Lista de tarefas"
             sub="Acompanhe e conclua as tarefas do seu diário" />
+            <div v-if="this.empty === true" class="empty-report"> 
+                <h4> Parabéns, diário concluído!!! Clique novamente no menu "Diários" para iniciar uma nova jornada. </h4>
+            </div> 
             <b-list-group>
                 <div v-for="(task, index) in tasks" :key="task.id">
                     <b-list-group-item class="task-cards"> 
@@ -34,6 +37,7 @@ export default {
   components: { PageTitle },
   data: function() {
     return {
+      empty: false,
       tasks: [],
       daily: {},
       num: { v: 0 },
@@ -48,7 +52,8 @@ export default {
       );
 
       if (waiting.data.length === 0) {
-        this.$router.push({ path: "adminPages" });
+        //this.$router.push({ path: "adminPages" });
+        this.empty = true;
       }
 
       this.daily.id = waiting.data.id;
@@ -109,7 +114,8 @@ export default {
       });
 
       if (!flag.v) {
-        this.$router.push({ path: "adminPages" });
+        //this.$router.push({ path: "adminPages" });
+        this.empty = true;
       } else {
         this.loadTasks();
       }
@@ -145,6 +151,9 @@ export default {
   margin-right: 10px;
   box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
     rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
+}
+.empty-report {
+  font-style: italic;
 }
 #classification {
   margin-bottom: 40px;

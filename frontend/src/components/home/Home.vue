@@ -2,6 +2,9 @@
     <div>
         <PageTitle icon="fa fa-folder" main="Painel de relatórios"
             sub="Relatórios de diários concluídos" />
+            <div v-if="this.empty === true" class="empty-report"> 
+                <h4> Você ainda não tem diários concluídos! </h4>
+            </div> 
             <b-list-group>
                 <div v-for="daily in dailys" :key="daily.id">
                     <b-list-group-item class="task-cards"> 
@@ -40,6 +43,7 @@ export default {
   components: { PageTitle },
   data: function() {
     return {
+      empty: false,
       dailys: [],
       tasks: {
         noPrazo: 0,
@@ -48,8 +52,6 @@ export default {
       },
       mostrar: 0,
       id_user: 0,
-      value: 10,
-      max: 100
     };
   },
   methods: {
@@ -60,6 +62,10 @@ export default {
         `${baseApiUrl}/query-complete-dailys/${this.id_user}`
       );
       this.dailys = d_data.data;
+
+      if (d_data.data.length === 0) {
+        this.empty = true;
+      }
 
       for (let index = 0; index < d_data.data.length; index++) {
         d_data.data[index].data = this.formatData(d_data.data[index].data);
@@ -92,10 +98,10 @@ export default {
       let dataCerta = data.replace(".", "/");
       if (dataCerta.substring(4, 5) === "0") {
         let sub = parseInt(dataCerta.substring(3, 4)) + 1;
-        dataCerta = dataCerta.substring(0, 3) + '' + sub;
-      }else{
+        dataCerta = dataCerta.substring(0, 3) + "" + sub;
+      } else {
         let sub = parseInt(dataCerta.substring(3, 5)) + 1;
-        dataCerta = dataCerta.substring(0, 3) + '' + sub;
+        dataCerta = dataCerta.substring(0, 3) + "" + sub;
       }
 
       return dataCerta;
@@ -137,6 +143,10 @@ export default {
   border-radius: 10px 40px 40px 10px;
 }
 
+.empty-report {
+  font-style: italic;
+}
+
 #total-layout {
   background-color: rgba(19, 57, 228, 0.835);
 }
@@ -146,5 +156,4 @@ export default {
 #foraPrazo-layout {
   background-color: rgba(228, 43, 19, 0.835);
 }
-
 </style>

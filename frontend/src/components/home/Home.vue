@@ -18,7 +18,7 @@
                             <div id="noPrazo-layout"> Total de tarefas no prazo: {{ tasks.noPrazo }} </div>
                             <div id="foraPrazo-layout"> Total de tarefas fora do prazo: {{ tasks.foraPrazo }} </div>
                             <div>
-                              {{ ((tasks.noPrazo * 100) / tasks.total).toFixed(2) }} % de produtividade
+                              {{ tasks.prod }} % de produtividade
                             </div>
                         </div>
                         <hr>
@@ -49,6 +49,7 @@ export default {
         noPrazo: 0,
         foraPrazo: 0,
         total: 0,
+        prod: 0,
       },
       mostrar: 0,
       id_user: 0,
@@ -87,23 +88,20 @@ export default {
           this.tasks.foraPrazo++;
         }
       }
+
+      this.tasks.prod = ((this.tasks.noPrazo * 100) / this.tasks.total).toFixed(
+        2
+      );
     },
     reset() {
       this.tasks.noPrazo = 0;
       this.tasks.foraPrazo = 0;
       this.tasks.total = 0;
+      this.tasks.prod = 0;
     },
     formatData(value) {
       let data = value + "";
       let dataCerta = data.replace(".", "/");
-      if (dataCerta.substring(4, 5) === "0") {
-        let sub = parseInt(dataCerta.substring(3, 4)) + 1;
-        dataCerta = dataCerta.substring(0, 3) + "" + sub;
-      } else {
-        let sub = parseInt(dataCerta.substring(3, 5)) + 1;
-        dataCerta = dataCerta.substring(0, 3) + "" + sub;
-      }
-
       return dataCerta;
     },
   },

@@ -35,3 +35,23 @@ Vue.toasted.register(
     payload => !payload.msg ? 'Parabéns! Diário concluído!' : payload.msg,
     { type: 'success', icon: 'check' }
 )
+
+Vue.toasted.register(
+    'noInitTask',
+    payload => !payload.msg ? 'Tarefa ainda não iniciada' : payload.msg,
+    { type : 'error', icon : 'times' }
+)
+
+Vue.toasted.register(
+    'initSuccess',
+    payload => !payload.msg ? 'Tarefa iniciada!' : payload.msg,
+    { type: 'success', icon: 'check' }
+)
+
+Vue.toasted.register(
+    'yetInitTask',
+    payload => !payload.msg ? 'Tarefa já foi iniciada!' : payload.msg,
+    { type : 'error', icon : 'times' }
+)
+
+

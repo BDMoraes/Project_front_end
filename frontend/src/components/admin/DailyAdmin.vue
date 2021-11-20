@@ -60,7 +60,7 @@ export default {
     save() {
       const now = new Date();
       const dia = now.getDate();
-      const mes = now.getMonth();
+      const mes = now.getMonth() + 1;
       const data = parseFloat(dia + "." + mes);
       this.daily.data = data;
       const method = "post";

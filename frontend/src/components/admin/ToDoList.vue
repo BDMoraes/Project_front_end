@@ -16,8 +16,11 @@
                         </div>
                         <hr>
                         <div>
+                             <b-button id="initBt" variant="primary" @click="iniciar(task)" size="md">
+                                iniciar
+                             </b-button>
                              <b-button variant="success" @click="concluir(task)" size="md">
-                                <i class="fa fa-check"></i>
+                                concluir
                              </b-button>
                         </div> 
                     </b-list-group-item> 
@@ -52,7 +55,6 @@ export default {
       );
 
       if (waiting.data.length === 0) {
-        //this.$router.push({ path: "adminPages" });
         this.empty = true;
       }
 
@@ -81,43 +83,63 @@ export default {
       return this.num.v;
     },
     async concluir(task) {
-      const flag = { v: true };
-      const data = new Date();
-      let hora = data.getHours() + "." + data.getMinutes();
-      hora = parseFloat(hora);
-      task.finalizacao = hora;
+      const init = await axios.get(`${baseApiUrl}/tasks/${task.id}`);
 
-      const dia = data.getDate();
-      const mes = data.getMonth();
-      const dataTask = parseFloat(dia + "." + mes);
+      if (init.data.inicializacao != null) {
+        const flag = { v: true };
+        const data = new Date();
+        let hora = data.getHours() + "." + data.getMinutes();
+        hora = parseFloat(hora);
+        task.finalizacao = hora;
 
-      if (hora > parseFloat(task.entrega) || dataTask > this.daily.data) {
-        task.noPrazo = 0;
+        const dia = data.getDate();
+        const mes = data.getMonth();
+        const dataTask = parseFloat(dia + "." + mes);
+
+        if (hora > parseFloat(task.entrega) || dataTask > this.daily.data) {
+          task.noPrazo = 0;
+        } else {
+          task.noPrazo = 1;
+        }
+
+        const finalize = await axios.put(
+          `${baseApiUrl}/finalizeTasks/${this.daily.id}`,
+          task
+        );
+
+        this.$toasted.global.taskSuccess();
+
+        if (finalize.data) {
+          this.$toasted.global.dailySuccess();
+          flag.v = false;
+        }
+
+        this.tasks = this.tasks.filter(function(obj) {
+          return obj.id !== task.id;
+        });
+
+        if (!flag.v) {
+          //this.$router.push({ path: "adminPages" });
+          this.empty = true;
+        } else {
+          this.loadTasks();
+        }
       } else {
-        task.noPrazo = 1;
+        this.$toasted.global.noInitTask();
       }
+    },
+    async iniciar(task) {
+      const init = await axios.get(`${baseApiUrl}/tasks/${task.id}`);
 
-      const finalize = await axios.put(
-        `${baseApiUrl}/finalizeTasks/${this.daily.id}`,
-        task
-      );
-
-      this.$toasted.global.taskSuccess();
-
-      if (finalize.data) {
-        this.$toasted.global.dailySuccess();
-        flag.v = false;
-      }
-
-      this.tasks = this.tasks.filter(function(obj) {
-        return obj.id !== task.id;
-      });
-
-      if (!flag.v) {
-        //this.$router.push({ path: "adminPages" });
-        this.empty = true;
+      if (init.data.inicializacao != null) {
+        this.$toasted.global.yetInitTask();
       } else {
-        this.loadTasks();
+        const data = new Date();
+        let hora = data.getHours() + "." + data.getMinutes();
+        hora = parseFloat(hora);
+        task.inicializacao = hora;
+        await axios.put(`${baseApiUrl}/initTasks/${task.id}`, task);
+        this.$toasted.global.initSuccess();
       }
     },
   },
@@ -135,7 +157,7 @@ export default {
   justify-content: center;
   align-items: center;
   margin-top: 7px;
-  font-size: 18px;
+  font-size: 25px;
   box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px,
     rgba(0, 0, 0, 0.22) 0px 15px 12px;
   font-family: Verdana, Geneva, Tahoma, sans-serif;
@@ -168,5 +190,8 @@ export default {
 }
 #dive {
   background-color: rgb(219, 156, 84);
+}
+#initBt{
+  margin-right: 40px;
 }
 </style>

@@ -8,7 +8,7 @@
             <b-list-group>
                 <div v-for="(task, index) in tasks" :key="task.id">
                     <b-list-group-item class="task-cards"> 
-                      <div id="classification"> {{ index + 1 }} º </div> 
+                      <div id="classification"> {{ index + 1 }} º</div> <div id="warning" v-if="verify(task) === 0">Atenção com o horário!</div>
                         <div class="task-texts" >
                             <div id="divt"> {{ task.titulo }} </div> 
                             <div id="divd"> {{ task.descricao }} </div> 
@@ -102,7 +102,7 @@ export default {
         const dataTask = parseFloat(dia + "." + mes);
 
         if (
-          parseFloat(task.entrega) - parseFloat(task.finalizacao) > 0  ||
+          parseFloat(task.entrega) - parseFloat(task.finalizacao) > 0.0  ||
           parseFloat(dataTask) > parseFloat(this.daily.data)
         ) {
           task.noPrazo = 0;
@@ -160,12 +160,19 @@ export default {
         this.$toasted.global.initSuccess();
       }
     },
-    verifLimit(){
+    verify(task){
+       const data_ini = new Date();
+       let hora = data_ini.getHours() + "." + data_ini.getMinutes();
+       hora = parseFloat(hora);
+      if (parseFloat(task.entrega) - hora <= 0.10) {
+        return 0
+      }else{
+        return 1
+      }
     }
   },
   mounted() {
     this.loadTasks();
-    this.verifLimit();
   },
 };
 </script>
@@ -214,5 +221,9 @@ export default {
 }
 #initBt {
   margin-right: 40px;
+}
+#warning {
+   margin-bottom: 20px;
+   color: rgba(200, 25, 25, 0.911);
 }
 </style>

@@ -21,7 +21,8 @@
                               {{ tasks.prod }} % de produtividade
                             </div>
                              <div v-for="ttask in Ttasks" :key="ttask.id">
-                              Tarefa: {{ ttask.titulo }} / Previsão: {{ formatHora(ttask.entrega) }} / Iniciada: {{ formatHora(ttask.inicializacao) }} - Finalizada: {{ formatHora(ttask.finalizacao) }} / Tempo executando: {{ formatHora2(ttask.finalizacao, ttask.inicializacao) }}
+                              Tarefa: {{ ttask.titulo }} / Previsão: {{ formatHora(ttask.entrega) }} / Iniciada: {{ formatHora(ttask.inicializacao) }} - Finalizada: {{ formatHora(ttask.finalizacao) }}
+                              <div id="horario"> Tempo executando: {{ formatHora2(ttask.finalizacao, ttask.inicializacao) }}</div> 
                             </div>
                         </div>
                         <hr>
@@ -93,8 +94,9 @@ export default {
           this.tasks.foraPrazo++;
         }
       }
-      this.tasks.prod = ((this.tasks.noPrazo * 100) / this.tasks.total).toFixed(2);
-
+      this.tasks.prod = ((this.tasks.noPrazo * 100) / this.tasks.total).toFixed(
+        2
+      );
     },
     reset() {
       this.tasks.noPrazo = 0;
@@ -113,11 +115,11 @@ export default {
       let horaCerta = hora.replace(".", ":");
       return horaCerta;
     },
-    formatHora2(value1 , value2) {
+    formatHora2(value1, value2) {
       let value = (value1 - value2).toFixed(2);
       let hora = value + "";
       let horaCerta = hora.replace(".", "h : ");
-      horaCerta = horaCerta + "m"
+      horaCerta = horaCerta + "m";
       return horaCerta;
     },
   },
@@ -169,5 +171,12 @@ export default {
 }
 #foraPrazo-layout {
   background-color: rgba(228, 43, 19, 0.835);
+}
+#horario {
+  background-color: rgba(18, 209, 243, 0.835);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 </style>

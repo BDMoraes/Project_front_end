@@ -21,7 +21,7 @@
                               {{ tasks.prod }} % de produtividade
                             </div>
                              <div v-for="ttask in Ttasks" :key="ttask.id">
-                              {{ ttask.titulo }} - {{ ttask.descricao}} -  {{ ttask.entrega }}
+                              Tarefa: {{ ttask.titulo }} / Previsão: {{ formatHora(ttask.entrega) }} / Iniciada: {{ formatHora(ttask.inicializacao) }} - Finalizada: {{ formatHora(ttask.finalizacao) }} / Tempo executando: {{ formatHora2(ttask.finalizacao, ttask.inicializacao) }}
                             </div>
                         </div>
                         <hr>
@@ -93,10 +93,8 @@ export default {
           this.tasks.foraPrazo++;
         }
       }
+      this.tasks.prod = ((this.tasks.noPrazo * 100) / this.tasks.total).toFixed(2);
 
-      this.tasks.prod = ((this.tasks.noPrazo * 100) / this.tasks.total).toFixed(
-        2
-      );
     },
     reset() {
       this.tasks.noPrazo = 0;
@@ -109,6 +107,18 @@ export default {
       let data = value + "";
       let dataCerta = data.replace(".", "/");
       return dataCerta;
+    },
+    formatHora(value) {
+      let hora = value + "";
+      let horaCerta = hora.replace(".", ":");
+      return horaCerta;
+    },
+    formatHora2(value1 , value2) {
+      let value = (value1 - value2).toFixed(2);
+      let hora = value + "";
+      let horaCerta = hora.replace(".", "h : ");
+      horaCerta = horaCerta + "m"
+      return horaCerta;
     },
   },
   mounted() {

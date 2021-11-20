@@ -66,9 +66,8 @@ export default {
         .then((res) => {
           this.tasks = res.data;
           for (let index = 0; index < res.data.length; index++) {
-            this.tasks[index].entrega = this.formatHora(
-              this.tasks[index].entrega
-            );
+            this.tasks[index].entrega = this.formatHora(this.tasks[index].entrega);
+            this.tasks[index].limit = false;
           }
         })
         .catch(showError);
@@ -88,15 +87,24 @@ export default {
       if (init.data.inicializacao != null) {
         const flag = { v: true };
         const data = new Date();
-        let hora = data.getHours() + "." + data.getMinutes();
-        hora = parseFloat(hora);
-        task.finalizacao = hora;
+        if (data.getMinutes() / 10 < 1) {
+          let hora = data.getHours() + ".0" + data.getMinutes();
+          hora = parseFloat(hora);
+          task.finalizacao = hora;
+        } else {
+          let hora = data.getHours() + "." + data.getMinutes();
+          hora = parseFloat(hora);
+          task.finalizacao = hora;
+        }
 
-        //const dia = data.getDate();
-        //const mes = data.getMonth() + 1;
-        //const dataTask = parseFloat(dia + "." + mes);
+        const dia = data.getDate();
+        const mes = data.getMonth() + 1;
+        const dataTask = parseFloat(dia + "." + mes);
 
-        if (hora > parseFloat(task.entrega) /*|| dataTask > this.daily.data*/) {
+        if (
+          parseFloat(task.entrega) - parseFloat(task.finalizacao) > 0  ||
+          parseFloat(dataTask) > parseFloat(this.daily.data)
+        ) {
           task.noPrazo = 0;
         } else {
           task.noPrazo = 1;
@@ -134,9 +142,15 @@ export default {
         this.$toasted.global.yetInitTask();
       } else {
         const data_ini = new Date();
-        let hora = data_ini.getHours() + "." + data_ini.getMinutes();
-        hora = parseFloat(hora);
-        task.inicializacao = hora;
+        if (data_ini.getMinutes() / 10 < 1) {
+          let hora = data_ini.getHours() + ".0" + data_ini.getMinutes();
+          hora = parseFloat(hora);
+          task.inicializacao = hora;
+        } else {
+          let hora = data_ini.getHours() + "." + data_ini.getMinutes();
+          hora = parseFloat(hora);
+          task.inicializacao = hora;
+        }
         const now = new Date();
         let dia = now.getDate();
         let mes = now.getMonth() + 1;
@@ -146,9 +160,12 @@ export default {
         this.$toasted.global.initSuccess();
       }
     },
+    verifLimit(){
+    }
   },
   mounted() {
     this.loadTasks();
+    this.verifLimit();
   },
 };
 </script>

@@ -92,11 +92,11 @@ export default {
         hora = parseFloat(hora);
         task.finalizacao = hora;
 
-        const dia = data.getDate();
-        const mes = data.getMonth();
-        const dataTask = parseFloat(dia + "." + mes);
+        //const dia = data.getDate();
+        //const mes = data.getMonth() + 1;
+        //const dataTask = parseFloat(dia + "." + mes);
 
-        if (hora > parseFloat(task.entrega) || dataTask > this.daily.data) {
+        if (hora > parseFloat(task.entrega) /*|| dataTask > this.daily.data*/) {
           task.noPrazo = 0;
         } else {
           task.noPrazo = 1;
@@ -119,7 +119,6 @@ export default {
         });
 
         if (!flag.v) {
-          //this.$router.push({ path: "adminPages" });
           this.empty = true;
         } else {
           this.loadTasks();
@@ -134,10 +133,15 @@ export default {
       if (init.data.inicializacao != null) {
         this.$toasted.global.yetInitTask();
       } else {
-        const data = new Date();
-        let hora = data.getHours() + "." + data.getMinutes();
+        const data_ini = new Date();
+        let hora = data_ini.getHours() + "." + data_ini.getMinutes();
         hora = parseFloat(hora);
         task.inicializacao = hora;
+        const now = new Date();
+        let dia = now.getDate();
+        let mes = now.getMonth() + 1;
+        let data = parseFloat(dia + "." + mes);
+        task.diaInicializacao = data;
         await axios.put(`${baseApiUrl}/initTasks/${task.id}`, task);
         this.$toasted.global.initSuccess();
       }
@@ -191,7 +195,7 @@ export default {
 #dive {
   background-color: rgb(219, 156, 84);
 }
-#initBt{
+#initBt {
   margin-right: 40px;
 }
 </style>

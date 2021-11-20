@@ -20,6 +20,9 @@
                             <div>
                               {{ tasks.prod }} % de produtividade
                             </div>
+                             <div v-for="ttask in Ttasks" :key="ttask.id">
+                              {{ ttask.titulo }} - {{ ttask.descricao}} -  {{ ttask.entrega }}
+                            </div>
                         </div>
                         <hr>
                         <div>
@@ -44,6 +47,7 @@ export default {
   data: function() {
     return {
       empty: false,
+      Ttasks: [],
       dailys: [],
       tasks: {
         noPrazo: 0,
@@ -81,6 +85,7 @@ export default {
         `${baseApiUrl}/query-complete-tasks/${daily.id}`
       );
       this.tasks.total = t_data.data.length;
+      this.Ttasks = t_data.data;
       for (let index = 0; index < t_data.data.length; index++) {
         if (t_data.data[index].noPrazo === 1) {
           this.tasks.noPrazo++;
@@ -98,6 +103,7 @@ export default {
       this.tasks.foraPrazo = 0;
       this.tasks.total = 0;
       this.tasks.prod = 0;
+      this.Ttasks = [];
     },
     formatData(value) {
       let data = value + "";

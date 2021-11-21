@@ -94,9 +94,7 @@ export default {
           this.tasks.foraPrazo++;
         }
       }
-      this.tasks.prod = ((this.tasks.noPrazo * 100) / this.tasks.total).toFixed(
-        2
-      );
+      this.tasks.prod = ((this.tasks.noPrazo * 100) / this.tasks.total).toFixed(2);
     },
     reset() {
       this.tasks.noPrazo = 0;

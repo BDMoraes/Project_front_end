@@ -206,9 +206,8 @@ export default {
 </script>
 
 <style>
-.not-yet{
+.not-yet {
   color: rgba(200, 25, 25, 0.911);
   font-weight: bold;
-  font-style: italic;
 }
 </style>

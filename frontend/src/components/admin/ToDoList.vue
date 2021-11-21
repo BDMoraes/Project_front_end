@@ -44,6 +44,7 @@ export default {
       tasks: [],
       daily: {},
       num: { v: 0 },
+      flagP: false,
     };
   },
   methods: {
@@ -66,8 +67,9 @@ export default {
         .then((res) => {
           this.tasks = res.data;
           for (let index = 0; index < res.data.length; index++) {
-            this.tasks[index].entrega = this.formatHora(this.tasks[index].entrega);
-            this.tasks[index].limit = false;
+            this.tasks[index].entrega = this.formatHora(
+              this.tasks[index].entrega
+            );
           }
         })
         .catch(showError);
@@ -90,21 +92,19 @@ export default {
         if (data.getMinutes() / 10 < 1) {
           let hora = data.getHours() + ".0" + data.getMinutes();
           hora = parseFloat(hora);
-          task.finalizacao = hora;
+          task.finalizacao = parseFloat(hora);
         } else {
           let hora = data.getHours() + "." + data.getMinutes();
           hora = parseFloat(hora);
-          task.finalizacao = hora;
+          task.finalizacao = parseFloat(hora);
         }
+        this.compara(task.finalizacao, parseFloat(task.entrega));
 
         const dia = data.getDate();
         const mes = data.getMonth() + 1;
         const dataTask = parseFloat(dia + "." + mes);
 
-        if (
-          parseFloat(task.entrega) - parseFloat(task.finalizacao) > 0.0  ||
-          parseFloat(dataTask) > parseFloat(this.daily.data)
-        ) {
+        if (this.flagP || dataTask > parseFloat(this.daily.data)){
           task.noPrazo = 0;
         } else {
           task.noPrazo = 1;
@@ -160,16 +160,23 @@ export default {
         this.$toasted.global.initSuccess();
       }
     },
-    verify(task){
-       const data_ini = new Date();
-       let hora = data_ini.getHours() + "." + data_ini.getMinutes();
-       hora = parseFloat(hora);
-      if (parseFloat(task.entrega) - hora <= 0.10) {
-        return 0
-      }else{
-        return 1
+    verify(task) {
+      const data_ini = new Date();
+      let hora = data_ini.getHours() + "." + data_ini.getMinutes();
+      hora = parseFloat(hora);
+      if (parseFloat(task.entrega) - hora <= 0.1) {
+        return 0;
+      } else {
+        return 1;
       }
-    }
+    },
+    compara(v1, v2) {
+      if (v1 > v2) {
+        this.flagP = true;
+      } else {
+        this.flagP = false;
+      }
+    },
   },
   mounted() {
     this.loadTasks();
@@ -223,7 +230,7 @@ export default {
   margin-right: 40px;
 }
 #warning {
-   margin-bottom: 20px;
-   color: rgba(200, 25, 25, 0.911);
+  margin-bottom: 20px;
+  color: rgba(200, 25, 25, 0.911);
 }
 </style>

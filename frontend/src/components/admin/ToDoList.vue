@@ -91,20 +91,20 @@ export default {
         const data = new Date();
         if (data.getMinutes() / 10 < 1) {
           let hora = data.getHours() + ".0" + data.getMinutes();
-          hora = parseFloat(hora);
-          task.finalizacao = parseFloat(hora);
+          hora = parseFloat(hora).toFixed(2);
+          task.finalizacao = hora;
         } else {
           let hora = data.getHours() + "." + data.getMinutes();
-          hora = parseFloat(hora);
-          task.finalizacao = parseFloat(hora);
+          hora = parseFloat(hora).toFixed(2);
+          task.finalizacao = hora;
         }
-        this.compara(task.finalizacao, parseFloat(task.entrega));
+        this.compara(task.finalizacao, parseFloat(task.entrega).toFixed(2));
 
         const dia = data.getDate();
         const mes = data.getMonth() + 1;
-        const dataTask = parseFloat(dia + "." + mes);
+        const dataTask = parseFloat(dia + "." + mes).toFixed(2);
 
-        if (this.flagP || dataTask > parseFloat(this.daily.data)){
+        if (this.flagP || dataTask > parseFloat(this.daily.data).toFixed(2)){
           task.noPrazo = 0;
         } else {
           task.noPrazo = 1;
@@ -144,11 +144,11 @@ export default {
         const data_ini = new Date();
         if (data_ini.getMinutes() / 10 < 1) {
           let hora = data_ini.getHours() + ".0" + data_ini.getMinutes();
-          hora = parseFloat(hora);
+          hora = parseFloat(hora).toFixed(2);
           task.inicializacao = hora;
         } else {
           let hora = data_ini.getHours() + "." + data_ini.getMinutes();
-          hora = parseFloat(hora);
+          hora = parseFloat(hora).toFixed(2);
           task.inicializacao = hora;
         }
         const now = new Date();
@@ -164,7 +164,7 @@ export default {
       const data_ini = new Date();
       let hora = data_ini.getHours() + "." + data_ini.getMinutes();
       hora = parseFloat(hora);
-      if (parseFloat(task.entrega) - hora <= 0.1) {
+      if (parseFloat(task.entrega).toFixed(2) - hora <= 0.1) {
         return 0;
       } else {
         return 1;

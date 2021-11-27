@@ -8,7 +8,7 @@
             <b-list-group>
                 <div v-for="(task, index) in tasks" :key="task.id">
                     <b-list-group-item class="task-cards"> 
-                      <div id="classification"> {{ index + 1 }} º</div> <div id="warning" v-if="verify(task) === 0">Atenção com o horário!</div>
+                      <div id="classification"> {{ index + 1 }} º</div> <div id="warning" v-if="verify(task) === 0">Atenção com a entrega desta tarefa!</div>
                         <div class="task-texts" >
                             <div id="divt"> {{ task.titulo }} </div> 
                             <div id="divd"> {{ task.descricao }} </div> 
@@ -44,7 +44,6 @@ export default {
       tasks: [],
       daily: {},
       num: { v: 0 },
-      flagP: false,
     };
   },
   methods: {
@@ -89,25 +88,21 @@ export default {
       if (init.data.inicializacao != null) {
         const flag = { v: true };
         const data = new Date();
-        if (data.getMinutes() / 10 < 1) {
-          let hora = data.getHours() + ".0" + data.getMinutes();
-          hora = parseFloat(hora).toFixed(2);
-          task.finalizacao = hora;
-        } else {
-          let hora = data.getHours() + "." + data.getMinutes();
-          hora = parseFloat(hora).toFixed(2);
-          task.finalizacao = hora;
-        }
-        this.compara(task.finalizacao, parseFloat(task.entrega).toFixed(2));
+        let hora = data.getHours() + "." + data.getMinutes();
+        hora = parseFloat(hora).toFixed(2);
+        task.finalizacao = hora;
 
         const dia = data.getDate();
         const mes = data.getMonth() + 1;
         const dataTask = parseFloat(dia + "." + mes).toFixed(2);
 
-        if (this.flagP || dataTask > parseFloat(this.daily.data).toFixed(2)){
-          task.noPrazo = 0;
-        } else {
+        if (
+          this.compara(task.entrega, task.finalizacao) &&
+          this.compara(this.daily.data, dataTask)
+        ) {
           task.noPrazo = 1;
+        } else {
+          task.noPrazo = 0;
         }
 
         const finalize = await axios.put(
@@ -164,17 +159,39 @@ export default {
       const data_ini = new Date();
       let hora = data_ini.getHours() + "." + data_ini.getMinutes();
       hora = parseFloat(hora);
-      if (parseFloat(task.entrega).toFixed(2) - hora <= 0.1) {
+      const dia = data_ini.getDate();
+      const mes = data_ini.getMonth() + 1;
+      const dataTask = parseFloat(dia + "." + mes).toFixed(2);
+
+      if ((parseFloat(task.entrega).toFixed(2) - hora <= 0.1) || !this.compara(this.daily.data, dataTask)) {
         return 0;
       } else {
         return 1;
       }
     },
     compara(v1, v2) {
-      if (v1 > v2) {
-        this.flagP = true;
+      let vs1 = v1 + "";
+      let vs2 = v2 + "";
+
+      var pad = "00";
+
+      var n = vs1;
+      vs1 = (pad+n).slice(-(pad.length+3));
+
+      n = vs2;
+      vs2 = (pad+n).slice(-(pad.length+3));
+
+      let p1_1 = vs1.slice(0, vs1.indexOf("."));
+      let p1_2 = vs2.slice(0, vs2.indexOf("."));
+      let p2_1 = vs1.slice(vs1.indexOf(".") + 1, vs1.length + 1);
+      let p2_2 = vs2.slice(vs2.indexOf(".") + 1, vs2.length + 1);
+
+      if (p1_1 > p1_2) {
+        return true;
+      } else if (p1_1 === p1_2 && p2_1 >= p2_2) {
+        return true;
       } else {
-        this.flagP = false;
+        return false;
       }
     },
   },

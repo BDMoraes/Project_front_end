@@ -21,7 +21,7 @@
                               {{ tasks.prod }} % de produtividade
                             </div>
                              <div v-for="ttask in Ttasks" :key="ttask.id">
-                              Tarefa: {{ ttask.titulo }} / Previsão: {{ formatHora(ttask.entrega) }} / Iniciada: {{ formatHora(ttask.inicializacao) }} - Finalizada: {{ formatHora(ttask.finalizacao) }}
+                              Tarefa: {{ ttask.titulo }} / Previsão: {{ formatHora(ttask.entrega) }} / Iniciada: {{ formatHora(ttask.inicializacao) }} - Finalizada: {{ formatHora(ttask.finalizacao) }} - Prazo: {{ formatHora(ttask.noPrazo) }}
                               <div id="horario"> Tempo executando: {{ formatHora2(ttask.finalizacao, ttask.inicializacao) }}</div> 
                             </div>
                         </div>

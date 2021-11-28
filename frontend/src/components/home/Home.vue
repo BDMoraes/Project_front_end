@@ -21,8 +21,8 @@
                               {{ tasks.prod }} % de produtividade
                             </div>
                              <div v-for="ttask in Ttasks" :key="ttask.id">
-                              Tarefa: {{ ttask.titulo }} / Previsão: {{ formatHora(ttask.entrega) }} / Iniciada: {{ formatHora(ttask.inicializacao) }} - Finalizada: {{ formatHora(ttask.finalizacao) }} - Prazo: {{ formatHora(ttask.noPrazo) }}
-                              <div id="horario"> Tempo executando: {{ formatHora2(ttask.finalizacao, ttask.inicializacao) }}</div> 
+                              Tarefa: {{ ttask.titulo }} / Previsão: {{ formatHora(ttask.entrega) }} / Iniciada: {{ formatHora(ttask.inicializacao) }} - Finalizada: {{ formatHora(ttask.finalizacao) }}
+                              <div id="horario"> Tempo executando: {{ calculaTempo(ttask) }}</div> 
                             </div>
                         </div>
                         <hr>
@@ -113,11 +113,12 @@ export default {
       let horaCerta = hora.replace(".", ":");
       return horaCerta;
     },
-    formatHora2(value1, value2) {
-      let value = (value1 - value2).toFixed(2);
+    calculaTempo(ttask) {
+      let multi_dias = ttask.diaFinalizacao - ttask.diaInicializacao;
+      let value = (ttask.finalizacao - ttask.inicializacao).toFixed(2);
       let hora = value + "";
       let horaCerta = hora.replace(".", "h : ");
-      horaCerta = horaCerta + "m";
+      horaCerta = multi_dias + " dias - " + horaCerta + "m";
       return horaCerta;
     },
   },

@@ -88,12 +88,12 @@ export default {
       if (init.data.inicializacao != null) {
         const flag = { v: true };
         const data = new Date();
-         if ( data.getMinutes() / 10 < 1) {
-          let hora =  data.getHours() + ".0" +  data.getMinutes();
+        if (data.getMinutes() / 10 < 1) {
+          let hora = data.getHours() + ".0" + data.getMinutes();
           hora = parseFloat(hora).toFixed(2);
           task.finalizacao = hora;
         } else {
-          let hora =  data.getHours() + "." +  data.getMinutes();
+          let hora = data.getHours() + "." + data.getMinutes();
           hora = parseFloat(hora).toFixed(2);
           task.finalizacao = hora;
         }
@@ -101,6 +101,8 @@ export default {
         const dia = data.getDate();
         const mes = data.getMonth() + 1;
         const dataTask = parseFloat(dia + "." + mes).toFixed(2);
+
+        task.diaFinalizacao = dataTask;
 
         if (
           this.compara(task.entrega, task.finalizacao) &&
@@ -152,11 +154,10 @@ export default {
           hora = parseFloat(hora).toFixed(2);
           task.inicializacao = hora;
         }
-        const now = new Date();
-        let dia = now.getDate();
-        let mes = now.getMonth() + 1;
-        let data = parseFloat(dia + "." + mes);
-        task.diaInicializacao = data;
+        const dia = data_ini.getDate();
+        const mes = data_ini.getMonth() + 1;
+        const dataTask = parseFloat(dia + "." + mes);
+        task.diaInicializacao = dataTask;
         await axios.put(`${baseApiUrl}/initTasks/${task.id}`, task);
         this.$toasted.global.initSuccess();
       }
@@ -169,7 +170,10 @@ export default {
       const mes = data_ini.getMonth() + 1;
       const dataTask = parseFloat(dia + "." + mes).toFixed(2);
 
-      if ((parseFloat(task.entrega).toFixed(2) - hora <= 0.1) || !this.compara(this.daily.data, dataTask)) {
+      if (
+        parseFloat(task.entrega).toFixed(2) - hora <= 0.1 ||
+        !this.compara(this.daily.data, dataTask)
+      ) {
         return 0;
       } else {
         return 1;
@@ -181,22 +185,22 @@ export default {
       var pad = "00";
 
       var n = vs1;
-      vs1 = (pad+n).slice(-(pad.length+3));
+      vs1 = (pad + n).slice(-(pad.length + 3));
 
       n = vs2;
-      vs2 = (pad+n).slice(-(pad.length+3));
+      vs2 = (pad + n).slice(-(pad.length + 3));
 
-      vs1 = vs1.padEnd(5, '0')
-      vs2 = vs2.padEnd(5, '0')
+      vs1 = vs1.padEnd(5, "0");
+      vs2 = vs2.padEnd(5, "0");
 
       let p1_1 = vs1.slice(0, vs1.indexOf("."));
       let p1_2 = vs2.slice(0, vs2.indexOf("."));
-      
+
       let p2_1 = vs1.slice(vs1.indexOf(".") + 1, vs1.length + 1);
       let p2_2 = vs2.slice(vs2.indexOf(".") + 1, vs2.length + 1);
 
-      p2_1 = p2_1.padEnd(2, '0')
-      p2_2 = p2_2.padEnd(2, '0')
+      p2_1 = p2_1.padEnd(2, "0");
+      p2_2 = p2_2.padEnd(2, "0");
 
       if (p1_1 > p1_2) {
         return true;

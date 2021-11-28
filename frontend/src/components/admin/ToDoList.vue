@@ -88,9 +88,15 @@ export default {
       if (init.data.inicializacao != null) {
         const flag = { v: true };
         const data = new Date();
-        let hora = data.getHours() + "." + data.getMinutes();
-        hora = parseFloat(hora).toFixed(2);
-        task.finalizacao = hora;
+         if ( data.getMinutes() / 10 < 1) {
+          let hora =  data.getHours() + ".0" +  data.getMinutes();
+          hora = parseFloat(hora).toFixed(2);
+          task.finalizacao = hora;
+        } else {
+          let hora =  data.getHours() + "." +  data.getMinutes();
+          hora = parseFloat(hora).toFixed(2);
+          task.finalizacao = hora;
+        }
 
         const dia = data.getDate();
         const mes = data.getMonth() + 1;
@@ -172,7 +178,6 @@ export default {
     compara(v1, v2) {
       let vs1 = v1 + "";
       let vs2 = v2 + "";
-
       var pad = "00";
 
       var n = vs1;
@@ -181,10 +186,17 @@ export default {
       n = vs2;
       vs2 = (pad+n).slice(-(pad.length+3));
 
+      vs1 = vs1.padEnd(5, '0')
+      vs2 = vs2.padEnd(5, '0')
+
       let p1_1 = vs1.slice(0, vs1.indexOf("."));
       let p1_2 = vs2.slice(0, vs2.indexOf("."));
+      
       let p2_1 = vs1.slice(vs1.indexOf(".") + 1, vs1.length + 1);
       let p2_2 = vs2.slice(vs2.indexOf(".") + 1, vs2.length + 1);
+
+      p2_1 = p2_1.padEnd(2, '0')
+      p2_2 = p2_2.padEnd(2, '0')
 
       if (p1_1 > p1_2) {
         return true;

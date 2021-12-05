@@ -25,18 +25,7 @@ import { mapState } from "vuex";
 export default {
   name: "Menu",
   computed: mapState(["isMenuVisible"]),
-  methods: {
-    onNodeSelect(node) {
-      this.$router.push({
-        name: "articlesByCategory",
-        params: { id: node.id },
-      });
-
-      if (this.$mq === "xs" || this.$mq === "sm") {
-        this.$store.commit("toggleMenu", false);
-      }
-    },
-  },
+  methods: {},
   mounted() {},
 };
 </script>

@@ -1,8 +1,15 @@
 <template>
     <header class="header">
-        <a class="toggle" @click="toggleMenu" v-if="!hideToggle">
-            <i class="fa fa-lg" :class="icon"></i>
-        </a>
+         <mq-layout class="submenu" :mq="['md', 'lg', 'xl']">
+             <a class="toggle" @click="toggleMenu" v-if="!hideToggle">
+                <i class="fa fa-lg" :class="icon"></i>
+            </a>
+        </mq-layout>
+        <mq-layout class="submenu"  :mq="['xs', 'sm']">
+            <a class="toggle" @click="toggleMenuS" v-if="!hideToggle">
+              <i class="fa fa-lg" :class="icon"></i>
+            </a>
+        </mq-layout>
         <mq-layout class="title" :mq="['sm', 'md', 'lg', 'xl']">
             {{ title }}
         </mq-layout>
@@ -24,6 +31,7 @@ export default {
     hideToggle: Boolean,
     hideUserDropdown: Boolean,
   },
+  initial: false,
   computed: {
     icon() {
       return this.$store.state.isMenuVisible
@@ -34,8 +42,20 @@ export default {
   methods: {
     toggleMenu() {
       this.$store.commit("toggleMenu");
+      
+    },
+     toggleMenuS() {
+      if(!this.initial) {
+        this.$store.commit("toggleMenu", this.initial);
+        this.initial = true;
+      }
+      this.$store.commit("toggleMenu");
+      
     },
   },
+  mounted(){
+    this.toggleMenuS();
+  }
 };
 </script>
 
@@ -96,6 +116,21 @@ header.header > a.toggle {
 }
 
 header.header > a.toggle:hover {
+  color: #fff;
+  background-color: rgba(0, 0, 0, 0.2);
+}
+.submenu{
+  width: 60px;
+  height: 100%;
+  color: #fff;
+  justify-self: flex-start;
+  text-decoration: none;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.submenu:hover{
   color: #fff;
   background-color: rgba(0, 0, 0, 0.2);
 }

@@ -38,7 +38,8 @@
             <b-button class="ml-2" @click="reset">Cancelar</b-button>
         </b-form>
         <hr>
-        <b-table hover striped :items="Tasks" :fields="fields">
+         <mq-layout :mq="['md', 'lg', 'xl']">
+            <b-table hover striped :items="Tasks" :fields="fields">
             <template slot="actions" slot-scope="data">
                 <b-button variant="warning" @click="loadTask(data.item)" class="mr-2">
                     <i class="fa fa-pencil"></i>
@@ -48,6 +49,19 @@
                 </b-button>
             </template>
         </b-table>
+        </mq-layout>
+         <mq-layout :mq="['xs', 'sm']">
+            <b-table hover striped :items="Tasks" :fields="fields2">
+            <template slot="actions" slot-scope="data">
+                <b-button variant="warning" @click="loadTask(data.item)" class="mr-2">
+                    <i class="fa fa-pencil"></i>
+                </b-button>
+                <b-button variant="danger" @click="loadTask(data.item, 'remove')">
+                    <i class="fa fa-trash"></i>
+                </b-button>
+            </template>
+        </b-table>
+        </mq-layout>
         <hr>
          <div v-if="this.Tasks.length < 3" class="not-yet"> 
                 <h4>Falta(m) {{Math.abs(this.Tasks.length - 3)}} tarefa(s) para a geração do diário</h4>
@@ -88,6 +102,11 @@ export default {
           formatter: "formatPrioridade",
         },
         { key: "entrega", label: "Entrega", formatter: "formatHora" },
+        { key: "actions", label: "Ações" },
+      ],
+      fields2: [
+        { key: "titulo", label: "Titulo" },
+        { key: "descricao", label: "Descricao" },
         { key: "actions", label: "Ações" },
       ],
       selectedLoc: null,

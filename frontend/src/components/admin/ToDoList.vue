@@ -170,10 +170,8 @@ export default {
       const mes = data_ini.getMonth() + 1;
       const dataTask = parseFloat(dia + "." + mes).toFixed(2);
 
-      if (
-        parseFloat(task.entrega).toFixed(2) - hora <= 0.1 ||
-        !this.compara(this.daily.data, dataTask)
-      ) {
+      if (parseFloat(task.entrega).toFixed(2) - hora <= 0.1 || !this.compara(this.daily.data, dataTask)){
+        axios.post(`${baseApiUrl}/sendAlert`, task);
         return 0;
       } else {
         return 1;

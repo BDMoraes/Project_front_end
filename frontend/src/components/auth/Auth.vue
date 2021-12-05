@@ -19,6 +19,11 @@
                 <span v-if="showSignup">Login</span>
                 <span v-else>Registrar</span>
             </a>
+
+             <a href @click.prevent="forgotPass()">
+                <span>Esqueceu sua senha?</span>
+             </a>
+
         </div>
     </div>
 </template>
@@ -55,6 +60,9 @@ export default {
           this.showSignup = false;
         })
         .catch(showError);
+    },
+    forgotPass() {
+      this.$router.push({ path: "forgotPass" });
     },
   },
 };

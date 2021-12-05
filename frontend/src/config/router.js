@@ -7,7 +7,7 @@ import TasksAdmin from '@/components/admin/TasksAdmin'
 import UserAdmin from '@/components/admin//UserAdmin'
 import ToDoList from '@/components/admin/ToDoList'
 import Auth from '@/components/auth/Auth'
-
+import ForgotPass from '@/components/auth/ForgotPass'
 import { userKey } from '@/global'
 
 Vue.use(VueRouter)
@@ -39,6 +39,10 @@ const routes = [{
     name: 'UserAdmin',
     path: '/userAdmin',
     component: UserAdmin
+}, {
+    name: 'forgotPass',
+    path: '/forgotPass',
+    component: ForgotPass
 }]
 
 const router = new VueRouter({

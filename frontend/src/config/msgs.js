@@ -53,5 +53,10 @@ Vue.toasted.register(
     payload => !payload.msg ? 'Tarefa já foi iniciada!' : payload.msg,
     { type : 'error', icon : 'times' }
 )
+Vue.toasted.register(
+    'passResetSuccess',
+    payload => !payload.msg ? 'Verifique seu email' : payload.msg,
+    { type : 'success', icon : 'check' }
+)
 
 

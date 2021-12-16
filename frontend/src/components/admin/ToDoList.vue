@@ -103,11 +103,9 @@ export default {
         const dataTask = parseFloat(dia + "." + mes).toFixed(2);
 
         task.diaFinalizacao = dataTask;
-
-        if (
-          this.compara(task.entrega, task.finalizacao) &&
-          this.compara(this.daily.data, dataTask)
-        ) {
+        const param1 = parseFloat(task.entrega.replace(":", "."));
+        const param2 = parseFloat(task.finalizacao.replace(".", "."));
+        if (param1 - param2 >= 0 && this.compara(this.daily.data, dataTask)) {
           task.noPrazo = 1;
         } else {
           task.noPrazo = 0;
@@ -169,9 +167,14 @@ export default {
       const dia = data_ini.getDate();
       const mes = data_ini.getMonth() + 1;
       const dataTask = parseFloat(dia + "." + mes).toFixed(2);
-
-      if (parseFloat(task.entrega).toFixed(2) - hora <= 0.1 || !this.compara(this.daily.data, dataTask)){
-        axios.post(`${baseApiUrl}/sendAlert`, task);
+      const param = parseFloat(task.entrega.replace(":", "."));
+      if (
+        (param - hora).toFixed(2) <= 0.1 ||
+        !this.compara(this.daily.data, dataTask)
+      ) {
+        if (task.sent === null) {
+          axios.post(`${baseApiUrl}/sendAlert`, task);
+        }
         return 0;
       } else {
         return 1;

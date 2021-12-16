@@ -94,7 +94,9 @@ export default {
           this.tasks.foraPrazo++;
         }
       }
-      this.tasks.prod = ((this.tasks.noPrazo * 100) / this.tasks.total).toFixed(2);
+      this.tasks.prod = ((this.tasks.noPrazo * 100) / this.tasks.total).toFixed(
+        2
+      );
     },
     reset() {
       this.tasks.noPrazo = 0;
@@ -114,12 +116,53 @@ export default {
       return horaCerta;
     },
     calculaTempo(ttask) {
-      let multi_dias = ttask.diaFinalizacao - ttask.diaInicializacao;
-      let value = (ttask.finalizacao - ttask.inicializacao).toFixed(2);
-      let hora = value + "";
-      let horaCerta = hora.replace(".", "h : ");
-      horaCerta = multi_dias + " dias - " + horaCerta + "m";
+      let multi_dias = parseInt(ttask.diaFinalizacao - ttask.diaInicializacao);
+      if (multi_dias === 0) {
+        multi_dias = " ";
+      } else {
+        multi_dias = multi_dias + " dias";
+      }
+      let value = this.calculaTempoX(ttask);
+      if (value != -1) {
+        value = value + "";
+      } else {
+        value = "";
+      }
+      let horaCerta = multi_dias + "" + value;
       return horaCerta;
+    },
+    calculaTempoX(ttask) {
+      let v1 = ttask.inicializacao;
+      let v2 = ttask.finalizacao;
+      let vs1 = v1 + "";
+      let vs2 = v2 + "";
+      var pad = "00";
+      var n = vs1;
+      vs1 = (pad + n).slice(-(pad.length + 3));
+      n = vs2;
+      vs2 = (pad + n).slice(-(pad.length + 3));
+      vs1 = vs1.padEnd(5, "0");
+      vs2 = vs2.padEnd(5, "0");
+      let p1_1 = vs1.slice(0, vs1.indexOf("."));
+      let p1_2 = vs2.slice(0, vs2.indexOf("."));
+      let p2_1 = vs1.slice(vs1.indexOf(".") + 1, vs1.length + 1);
+      let p2_2 = vs2.slice(vs2.indexOf(".") + 1, vs2.length + 1);
+      p2_1 = p2_1.padEnd(2, "0");
+      p2_2 = p2_2.padEnd(2, "0");
+      let h = p1_2 * 60 + parseInt(p2_2) - (p1_1 * 60 + parseInt(p2_1));
+      if (h < 0) {
+        return -1;
+      } else {
+        return this.NumToTime(h);
+      }
+    },
+    NumToTime(num) {
+      var hours = Math.floor(num / 60);
+      var minutes = num % 60;
+      if (minutes + "".length < 2) {
+        minutes = "0" + minutes;
+      }
+      return hours + " h : " + minutes + " m";
     },
   },
   mounted() {

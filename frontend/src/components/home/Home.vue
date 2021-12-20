@@ -128,7 +128,7 @@ export default {
       } else {
         value = "";
       }
-      let horaCerta = multi_dias + "" + value;
+      let horaCerta = multi_dias + " " + value;
       return horaCerta;
     },
     calculaTempoX(ttask) {
